@@ -32,7 +32,7 @@ export class PersonajeService {
 
         const pool = await sql.connect(config);
         const response = await pool.request()
-            .input('Id',sql.Int, personaje?.id ?? '')    
+            .input('Id',sql.Int, personaje?.id ?? 0)    
             .input('Imagen',sql.NChar, personaje?.imagen ?? '')
             .input('Nombre',sql.NChar, personaje?.nombre ?? '')
             .input('Edad',sql.Int, personaje?.edad ?? 0)
@@ -67,7 +67,7 @@ export class PersonajeService {
         const pool = await sql.connect(config);
         const response = await pool.request()
             .input('id',sql.Int, id)
-            .query(`DELETE FROM ${personajeTabla} WHERE id = @id`);
+            .query(`DELETE FROM ${personajeTabla} WHERE Id = @Id`);
         console.log(response)
 
         return response.recordset;
