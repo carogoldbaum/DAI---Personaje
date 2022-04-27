@@ -4,6 +4,7 @@ import { PersonajeService } from '../services/personajeService.js';
 const router = Router();
 const personajeService = new PersonajeService();
 
+try {
 router.get('', async (req, res) => {
   console.log(`This is a get operation`);
   
@@ -11,7 +12,12 @@ router.get('', async (req, res) => {
 
   return res.status(200).json(personajes);
 });
+}
+catch (Error){
+  console.error(404);
+}
 
+try {
 router.get('/:id', async (req, res) => {
   console.log(`Request URL Param: ${req.params.id}`);
   console.log(`This is a get operation`);
@@ -20,7 +26,12 @@ router.get('/:id', async (req, res) => {
 
   return res.status(200).json(personaje);
 });
+}
+catch (Error){
+  console.error(404);
+}
 
+try { 
 router.post('', async (req, res) => {
   console.log(`This is a post operation`);
 
@@ -28,7 +39,12 @@ router.post('', async (req, res) => {
 
   return res.status(201).json(personaje);
 });
+}
+catch (Error){
+  console.error(404);
+}
 
+try {
 router.put('/:id', async (req, res) => {
   console.log(`Request URL Param: ${req.params.id}`);
   console.log(`This is a put operation`);
@@ -37,7 +53,12 @@ router.put('/:id', async (req, res) => {
 
   return res.status(200).json(personaje);
 });
+}
+catch (Error){
+  console.error(404);
+}
 
+try { 
 router.delete('/:id', async (req, res) => {
   console.log(`Request URL Param: ${req.params.id}`);
   console.log(`This is a delete operation`);
@@ -46,5 +67,9 @@ router.delete('/:id', async (req, res) => {
 
   return res.status(200).json(personaje);
 });
+}
+catch (Error){
+  console.error(404);
+}
 
 export default router;
