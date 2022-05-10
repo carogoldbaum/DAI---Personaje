@@ -9,7 +9,6 @@ router.get('', async (req, res) => {
   
   const {nombre, edad}= req.query;
 
-
   const personaje = await personajeService.getPersonaje(nombre,edad);
 
   return res.status(200).json(personaje);

@@ -9,40 +9,37 @@ export class PersonajeService {
     getPersonaje = async (nombre, edad) => {
         console.log('This is a function on the service');
         let response;
-       
-    
-        const pool = await sql.connect(config);
-        const response = await pool.request()
-            .input('nombre',sql.NChar, nombre)
-            .input('edad',sql.Int, edad)
-            .query(`SELECT * from ${personajeTabla} where nombre = @nombre and edad = @edad`);
-        console.log(response)
-
-        if(nombre == undefined){
-            if(edad == undefined){
+        console.log(edad, nombre);
+        if(!nombre){
+            if(!edad){
                 const pool = await sql.connect(config);
                 response = await pool.request().query(`SELECT * from ${personajeTabla}`);
-
+                console.log("a");
             }else{
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Edad',sql.Int, edad)
                 .query(`SELECT * from ${personajeTabla} where Edad = @Edad`);
+                console.log("b");
             }
+            console.log("c");
         }
-        else if(edad == undefined){
+        else if(!edad){
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Nombre',sql.NChar, nombre)
                 .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre`);
+                console.log("d");
             }
             else{
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Nombre',sql.NChar, nombre)
-                .input('Edad',sql.NChar, edad)
-                .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre && Edad = @Edad`);
+                .input('Edad',sql.Int, edad)
+                .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre AND Edad = @Edad`);
+                console.log("e");
             }
+            console.log("f");
         
         console.log(response)
         return response.recordset;
