@@ -9,27 +9,25 @@ export class PersonajeService {
     getPersonaje = async (nombre, edad) => {
         console.log('This is a function on the service');
         let response;
-        console.log(edad, nombre);
         if(!nombre){
             if(!edad){
                 const pool = await sql.connect(config);
                 response = await pool.request().query(`SELECT * from ${personajeTabla}`);
-                console.log("a");
+
             }else{
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Edad',sql.Int, edad)
                 .query(`SELECT * from ${personajeTabla} where Edad = @Edad`);
-                console.log("b");
+              
             }
-            console.log("c");
         }
         else if(!edad){
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Nombre',sql.NChar, nombre)
                 .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre`);
-                console.log("d");
+              
             }
             else{
                 const pool = await sql.connect(config);
@@ -37,9 +35,8 @@ export class PersonajeService {
                 .input('Nombre',sql.NChar, nombre)
                 .input('Edad',sql.Int, edad)
                 .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre AND Edad = @Edad`);
-                console.log("e");
+             
             }
-            console.log("f");
         
         console.log(response)
         return response.recordset;
@@ -101,5 +98,19 @@ export class PersonajeService {
         console.log(response)
 
         return response.recordset;
+    }
+
+    getImagenNombreIdFromPersonaje = async (imagen, nombre, id) => {
+        console.log('This is a function on the service');
+
+        const pool = await sql.connect(config);
+        const response = await pool.request()
+            .input('Imagen',sql.NChar, imagen)
+            .input('Nombre',sql.NChar, nombre)
+            .input('Id',sql.Int, id)
+            .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla}`);
+        console.log(response)
+
+        return response.recordset[0];
     }
 }

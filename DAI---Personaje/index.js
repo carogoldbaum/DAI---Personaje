@@ -5,7 +5,6 @@ import { jwtStrategy } from './src/common/jwt.strategy.js';
 import PersonajeRouter from "./src/controllers/personajeController.js";
 import AuthRouter from "./src/controllers/authController.js";
 
-
 const app = express();
 const port = 5000;
 
@@ -14,7 +13,7 @@ app.use(express.json());
 passport.use(jwtStrategy);
 app.use(passport.initialize());
 
-app.use("/personaje", PersonajeRouter);
+app.use("/characters", PersonajeRouter);
 app.use("/auth", AuthRouter);
 
 app.listen(port, () => {
