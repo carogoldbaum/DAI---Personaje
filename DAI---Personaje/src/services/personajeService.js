@@ -12,13 +12,13 @@ export class PersonajeService {
         if(!nombre){
             if(!edad){
                 const pool = await sql.connect(config);
-                response = await pool.request().query(`SELECT * from ${personajeTabla}`);
+                response = await pool.request().query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla}`);
 
             }else{
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Edad',sql.Int, edad)
-                .query(`SELECT * from ${personajeTabla} where Edad = @Edad`);
+                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Edad = @Edad`);
               
             }
         }
@@ -26,7 +26,7 @@ export class PersonajeService {
                 const pool = await sql.connect(config);
                 response = await pool.request()
                 .input('Nombre',sql.NChar, nombre)
-                .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre`);
+                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Nombre = @Nombre`);
               
             }
             else{
@@ -34,7 +34,7 @@ export class PersonajeService {
                 response = await pool.request()
                 .input('Nombre',sql.NChar, nombre)
                 .input('Edad',sql.Int, edad)
-                .query(`SELECT * from ${personajeTabla} where Nombre = @Nombre AND Edad = @Edad`);
+                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Nombre = @Nombre AND Edad = @Edad`);
              
             }
         
@@ -100,7 +100,7 @@ export class PersonajeService {
         return response.recordset;
     }
 
-    getImagenNombreIdFromPersonaje = async (imagen, nombre, id) => {
+   /* getImagenNombreIdFromPersonaje = async (imagen, nombre, id) => {
         console.log('This is a function on the service');
 
         const pool = await sql.connect(config);
@@ -112,5 +112,5 @@ export class PersonajeService {
         console.log(response)
 
         return response.recordset[0];
-    }
+    } */
 }

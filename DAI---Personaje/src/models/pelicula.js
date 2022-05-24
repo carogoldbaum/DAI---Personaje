@@ -1,5 +1,5 @@
 export class Pelicula{
-    idPelicula;
+    id;
     imagen;
     titulo;
     fechaCreacion;
