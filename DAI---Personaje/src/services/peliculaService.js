@@ -10,8 +10,9 @@ export class PeliculaService {
         console.log('This is a function on the service');
         const pool = await sql.connect(config);
         const response = await pool.request()
-
-        console.log(response)
+        .query(`SELECT Peliculas.IdPelicula, Peliculas.Imagen, Peliculas.Titulo, Peliculas.FechaCreacion from ${peliculaTabla}`);
+        
+            console.log(response)
         return response.recordset;
     }
 
@@ -69,5 +70,18 @@ export class PeliculaService {
         console.log(response)
 
         return response.recordset;
+    }
+
+    getOrdenarPelicula = async (titulo, orden) => {
+        console.log('This is a function on the service');
+        console.log(titulo);
+        const pool = await sql.connect(config);
+        const response = await pool.request()
+        .input('Titulo',sql.NChar, titulo ?? '')    
+        .input('FechaCreacion',sql.Date, fechaCreacion ?? 0)
+        .query(`SELECT * from ${peliculaTabla} WHERE Titulo = @Titulo order by FechaCreacion ${orden}`);
+        console.log(response)
+
+        return response.recordset[0];
     }
 }
