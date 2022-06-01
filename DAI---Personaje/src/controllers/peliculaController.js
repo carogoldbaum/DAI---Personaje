@@ -8,16 +8,9 @@ const peliculaService = new PeliculaService();
 router.get('', Authenticate, async (req, res) => {
   console.log(`This is a get operation`);
 
-  const pelicula = await peliculaService.getPelicula(req.query);
-
-  return res.status(200).json(pelicula);
-});
-
-router.get('/:id', Authenticate, async (req, res) => {
-  console.log(`Request URL Param: ${req.params.id}`);
-  console.log(`This is a get operation`);
-
-  const pelicula = await peliculaService.getPeliculaById(req.params.id);
+  const {titulo, orden} = req.query;
+  
+  const pelicula = await peliculaService.getPelicula(titulo, orden);
 
   return res.status(200).json(pelicula);
 });
@@ -39,10 +32,11 @@ router.put('/:id', Authenticate, async (req, res) => {
   return res.status(200).json(pelicula);
 });
 
-router.get('', Authenticate, async (req, res) => {
+router.get('/:id', Authenticate, async (req, res) => {
+  console.log(`Request URL Param: ${req.params.id}`);
   console.log(`This is a get operation`);
 
-  const pelicula = await peliculaService.getOrdenarPelicula(req.params.titulo, req.params.orden);
+  const pelicula = await peliculaService.getPersonajePelicula(req.params.id);
 
   return res.status(200).json(pelicula);
 });

@@ -3,5 +3,5 @@ export class Pelicula{
     imagen;
     titulo;
     fechaCreacion;
-    valoracion;
+    Calificacion;
 }

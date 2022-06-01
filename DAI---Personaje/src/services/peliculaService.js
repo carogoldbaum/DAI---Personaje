@@ -3,29 +3,26 @@ import config from '../../db.js'
 import 'dotenv/config'
 
 const peliculaTabla = process.env.DB_TABLA_PELICULA;
+const personajeTabla = process.env.DB_TABLA_PERSONAJE;
 
 export class PeliculaService {
 
-    getPelicula = async (nombre, edad) => {
+    getPelicula = async (titulo, orden) => {
         console.log('This is a function on the service');
-        const pool = await sql.connect(config);
-        const response = await pool.request()
-        .query(`SELECT Peliculas.IdPelicula, Peliculas.Imagen, Peliculas.Titulo, Peliculas.FechaCreacion from ${peliculaTabla}`);
-        
-            console.log(response)
-        return response.recordset;
-    }
-
-    getPeliculaById = async (id) => {
-        console.log('This is a function on the service');
-
-        const pool = await sql.connect(config);
-        const response = await pool.request()
-            .input('Id',sql.Int, id)
-            .query(`SELECT * from ${peliculaTabla} where Id = @Id`);
+        let response;
+        if(!titulo){
+            const pool = await sql.connect(config);
+            response = await pool.request()
+            .query(`SELECT Peliculas.IdPelicula, Peliculas.Imagen, Peliculas.Titulo, Peliculas.FechaCreacion from ${peliculaTabla}`);
+        }
+        else{  
+            const pool = await sql.connect(config);
+            response = await pool.request()
+            .input('Titulo',sql.NChar, titulo ?? '')    
+            .query(`SELECT * from ${peliculaTabla} WHERE Titulo = @Titulo order by FechaCreacion ${orden??'asc'}`);
+        }
         console.log(response)
-
-        return response.recordset[0];
+        return response.recordset;
     }
 
     createPelicula = async (pelicula) => {
@@ -72,16 +69,21 @@ export class PeliculaService {
         return response.recordset;
     }
 
-    getOrdenarPelicula = async (titulo, orden) => {
-        console.log('This is a function on the service');
-        console.log(titulo);
-        const pool = await sql.connect(config);
-        const response = await pool.request()
-        .input('Titulo',sql.NChar, titulo ?? '')    
-        .input('FechaCreacion',sql.Date, fechaCreacion ?? 0)
-        .query(`SELECT * from ${peliculaTabla} WHERE Titulo = @Titulo order by FechaCreacion ${orden}`);
+    getPersonajePelicula = async (id) => {
+        console.log('This is a function on the service', id);
+        let response;
+        let response2;
+        let pool; 
+        pool = await sql.connect(config);
+        response = await pool.request()
+        .input('id',sql.Int, id)
+        .query(`select * from ${peliculaTabla} where Peliculas.IdPelicula = @id`);
+        pool = await sql.connect(config);
+        response2 = await pool.request()
+        .input('id',sql.Int, id)
+        .query(`select * from ${personajeTabla} INNER JOIN PersonajesXPeliculas on Personaje.Id = PersonajesXPeliculas.IdPersonaje where PersonajesXPeliculas.IdPelicula = @id`);
         console.log(response)
 
-        return response.recordset[0];
+        return [response.recordset, response2.recordset];
     }
 }
