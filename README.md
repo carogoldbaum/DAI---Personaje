@@ -6,7 +6,7 @@
 4. Crear un archivo llamado ".env" y copiar lo que está en el comentario de la entrega.
 5. Escribir en el buscador de Windows "Administración de equipos".
 6. Luego hacer el siguiente camino: Administrador de configuración de SQL Server --> Configuración de red de SQL Server (Hay 5 opciones, elegir la cuarta) --> 
-Protocolos de SQLEXPRESS01 --> TCP/IP (Dar click derecho y 
+Protocolos de SQLEXPRESS --> TCP/IP (Dar click derecho y 
 habilitarlo).
 7. Dentro de Administración de Equipos, ir a "Servicios".
 8. Dar un click izquierdo a cualquier opción y escribir "SQL".
