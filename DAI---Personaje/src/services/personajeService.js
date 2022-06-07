@@ -6,71 +6,55 @@ const personajeTabla = process.env.DB_TABLA_PERSONAJE;
 
 export class PersonajeService {
 
-   /* getPersonaje = async (nombre, edad, peso, idPelicula) => {
+   getPersonaje = async (nombre,edad,peso,idPelicula) => {
         console.log('This is a function on the service');
-        let response;
-        if(!nombre){
-          if(!peso){
-            if(!edad){
-                const pool = await sql.connect(config);
-                response = await pool.request().query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla}`);
-            }else if(!peso && !nombre){
-                const pool = await sql.connect(config);
-                response = await pool.request()
-                .input('Edad',sql.Int, edad)
-                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Edad = @Edad`);
-              
-            } else if(!nombre && !edad){
-                const pool = await sql.connect(config);
-                response = await pool.request()
-                .input('Peso',sql.Int, peso)
-                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Peso = @Peso`);
-            }
-          } else if(!nombre){
-            const pool = await sql.connect(config);
-            response = await pool.request()
-            .input('Peso',sql.Int, peso)
-            .input('Edad',sql.Int, edad)
-            .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Peso = @Peso AND Edad = @Edad`);
-            }
+        const pool = await sql.connect(config);
+       
+        let query=`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} `;
+
+        if (idPelicula!=null) {
+            query=query+" INNER JOIN PersonajesXPeliculas ON Personaje.Id= PersonajesXPeliculas.IdPersonaje WHERE PersonajesXPeliculas.IdPelicula = @id  "
         }
-        
-        else if(!edad){
-                const pool = await sql.connect(config);
-                response = await pool.request()
-                .input('Nombre',sql.NChar, nombre)
-                .input('Peso',sql.Int, peso)
-                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Nombre = @Nombre AND Peso = @Peso`);
-              
-            }
-            else if(!peso){
-                const pool = await sql.connect(config);
-                response = await pool.request()
-                .input('Nombre',sql.NChar, nombre)
-                .input('Edad',sql.Int, edad)
-                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Nombre = @Nombre AND Edad = @Edad`);
-            }
-            
-            else if (!edad && !peso){
-                const pool = await sql.connect(config);
-                response = await pool.request()
-                .input('Nombre',sql.NChar, nombre)
-                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Nombre = @Nombre`);
-           
+
+        if(nombre!=null){
+            if(idPelicula!=null){ 
+                query=query+" and Nombre=@nombre"//Va a la segunda query
             }
             else{
-                const pool = await sql.connect(config);
-                response = await pool.request()
-                .input('Nombre',sql.NChar, nombre)
-                .input('Edad',sql.Int, edad)
-                .input('Peso',sql.Int, peso)
-                .query(`SELECT Personaje.Imagen, Personaje.Nombre, Personaje.Id from ${personajeTabla} where Nombre = @Nombre, Edad = @Edad AND Peso = @Peso`);
-             
+                query=query+ " where Nombre=@nombre" //Va a la primera query
             }
-        
+        }
+
+        if(edad!=null){
+            if(idPelicula!=null || nombre!=null){
+                query=query+" and Edad=@edad" //No va a la primera
+            }
+            else{ 
+                query=query+ " where Edad=@edad" //Va a la primera query
+            } 
+        }
+
+        if(peso!=null){
+            if(idPelicula!=null || nombre!=null || edad!=null){
+                query=query+" and Peso=@peso" //No va a la primera
+            }
+            else{
+                query=query+ " where Peso=@peso" //Va a la primera
+            } 
+        }
+
+        console.log(query);
+        console.log(nombre)
+        const response = await pool.request()
+        .input('Nombre',sql.VarChar,nombre)
+        .input('Edad',sql.Int, edad)
+        .input('Peso',sql.Int, peso)
+        .input('IdPelicula',sql.Int, idPelicula).query(query);
+       
         console.log(response)
+    
         return response.recordset;
-    } */
+    }
 
     getPersonajeById = async (id) => {
         console.log('This is a function on the service');

@@ -5,15 +5,16 @@ import { Authenticate } from '../common/jwt.strategy.js';
 const router = Router();
 const personajeService = new PersonajeService();
 
-/* router.get('', Authenticate, async (req, res) => {
+router.get('', Authenticate, async (req, res) => {
   console.log(`This is a get operation`);
   
-  const {nombre, edad, peso, idPelicula}= req.query;
+   const {nombre, edad, peso, idPelicula}= req.query;
+
 
   const personaje = await personajeService.getPersonaje(nombre, edad, peso, idPelicula);
 
   return res.status(200).json(personaje);
-}); */
+}); 
 
 router.get('/:id', Authenticate, async (req, res) => {
   console.log(`Request URL Param: ${req.params.id}`);
