@@ -70,20 +70,19 @@ export class PeliculaService {
     }
 
     getPersonajePelicula = async (id) => {
-        console.log('This is a function on the service', id);
+        console.log('This is a function on the service');
         let response;
-        let response2;
         let pool; 
         pool = await sql.connect(config);
         response = await pool.request()
         .input('id',sql.Int, id)
         .query(`select * from ${peliculaTabla} where Peliculas.IdPelicula = @id`);
         pool = await sql.connect(config);
-        response2 = await pool.request()
+        response = await pool.request()
         .input('id',sql.Int, id)
         .query(`select * from ${personajeTabla} INNER JOIN PersonajesXPeliculas on Personaje.Id = PersonajesXPeliculas.IdPersonaje where PersonajesXPeliculas.IdPelicula = @id`);
         console.log(response)
 
-        return [response.recordset, response2.recordset];
+        return [response.recordset];
     }
 }
